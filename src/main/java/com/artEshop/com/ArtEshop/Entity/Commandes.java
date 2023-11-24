@@ -25,9 +25,9 @@ public class Commandes {
     @JoinColumn(name = "idAchat",nullable = false)
     private Achat achat;
 
-    @OneToOne
-    @JoinColumn(name = "idNotification",nullable = false)
-    private Notification notification;
+//    @OneToOne
+//    @JoinColumn(name = "idNotification",nullable = false)
+//    private Notification notification;
 
 
 }

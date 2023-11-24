@@ -29,9 +29,9 @@ public class User {
     private String adresse;
 
 
-    @OneToOne
-    @JoinColumn(name = "idPanier",nullable = false)
-    private Panier panier;
+//    @OneToOne
+//    @JoinColumn(name = "idPanier",nullable = false)
+//    private Panier panier;
 
 
 

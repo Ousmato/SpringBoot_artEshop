@@ -1,6 +1,7 @@
 package com.artEshop.com.ArtEshop.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class Taille {
     private int idTaille;
 
     @Column(nullable = false)
+    @NotBlank
     private String libelle;
 
 

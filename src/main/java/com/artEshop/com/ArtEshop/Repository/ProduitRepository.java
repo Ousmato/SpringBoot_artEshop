@@ -13,6 +13,7 @@ import java.util.List;
 public interface ProduitRepository extends JpaRepository<Produits, Integer> {
 List<Produits> findByCategories(Categories categories);
 Produits findByCategoriesIdCategorieAndArtisansIdArtisans(int idcategorie, int idartisan);
+Produits findByIdProduit(int idProduit);
 //Produits findByNomAndidCat(String nomproduit, int idCategorie, int idArtisan);
 
 }

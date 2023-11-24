@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -20,7 +21,7 @@ public class Produits {
     private String description;
 
     @Column(nullable = false)
-    private int prix;
+    private double prix;
 
 
     @Column
@@ -30,6 +31,18 @@ public class Produits {
     @NotBlank
     private String photo;
 
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private double quantite;
+
+    @Column(nullable = false)
+    private boolean publier = false;
+
+    @Column(nullable = false)
+    private boolean acheter = false;
+
 
     @ManyToOne
     @JoinColumn(name = "idArtisan",nullable = false)
@@ -38,9 +51,5 @@ public class Produits {
     @ManyToOne
     @JoinColumn(name = "idCategorie",nullable = false)
     private Categories categories;
-
-//    @OneToMany
-//    private List<Commandes> commandes;
-
 
 }

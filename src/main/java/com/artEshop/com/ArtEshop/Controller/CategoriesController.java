@@ -23,7 +23,7 @@ public class CategoriesController {
     public ResponseEntity<Categories> add(@Valid @RequestBody Categories categories) {
         try {
             Categories addedCategory = categorieService.add(categories);
-            return new ResponseEntity<>(addedCategory, HttpStatus.CREATED);
+            return new ResponseEntity<>(addedCategory, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

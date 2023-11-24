@@ -1,21 +1,18 @@
 package com.artEshop.com.ArtEshop.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.util.List;
-
-@Data
 @Entity
-public class Categories {
+@Data
+public class Couleurs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idCategorie;
+    private int idCouleur;
 
     @Column(nullable = false)
-    @NotBlank
-    private String nom;
+    private String libelle;
+
 
 
 }

@@ -74,17 +74,13 @@ public class ArtisanController {
     }
 
     ////    :::::::::::::::::::::::::;methode pour activer artisan
-    @PutMapping("/active")
-    public ResponseEntity<Artisans> active(@Valid  @RequestBody Artisans artisans){
+    @PutMapping("/active/{idArtisans}")
+    public ResponseEntity<Artisans> active(@Valid  @PathVariable int idArtisans){
 
-        return new ResponseEntity<>(artisanService.active(artisans),HttpStatus.OK);
+        return new ResponseEntity<>(artisanService.active(idArtisans),HttpStatus.OK);
     }
 
-    //Endpoint connexion pour verifier si l'utilisateur existe
-    @GetMapping("/connexion")
-    public ResponseEntity<Artisans> artisan (@RequestParam("email") String email, @RequestParam("password") String password){
-        return new ResponseEntity<>(artisanService.connexion(email, password), HttpStatus.OK);
-    }
+
 
 
 @PutMapping("/modifier")

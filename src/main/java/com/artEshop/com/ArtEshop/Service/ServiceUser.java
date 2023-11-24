@@ -24,24 +24,16 @@ public String adduser(User user) {
         throw new RuntimeException("User already exists");
     } else {
 
-        LocalDate panierDate =LocalDate.now();
+        LocalDate panierDate = LocalDate.now();
         System.out.println(panierDate+"je trouver date");
         // Créez et enregistrez d'abord le panier
         Panier panier = new Panier();
-
-        System.out.println(panierDate+"je trouver date");
-//        panier.setUser(user);
         panier.setDate(panierDate);
-        System.out.println("qwertyui  "+ panier);
+        panier.setUser(user);
         panierRepository.save(panier);
-
-        System.out.println("panier enregistrer "+ panier);
-        // Associez le panier à l'utilisateur
-        user.setPanier(panier);
 
         // Enregistrez ensuite l'utilisateur
         userRepository.save(user);
-
         return "success";
     }
    }
@@ -67,7 +59,10 @@ public String adduser(User user) {
 
     //Methode connexion pour verifier si l'utilisateur existe
     public User connexion(String email, String password){
+    System.out.println("je suis dedans");
         User user = userRepository.findByEmailAndPassword(email, password);
+        System.out.println(user);
+
         if(user != null){
             return user;
         }else throw new EntityExistsException("user doesn't exist");

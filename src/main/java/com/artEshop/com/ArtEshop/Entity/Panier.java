@@ -16,9 +16,9 @@ public class Panier {
     @Column(nullable = false)
     private LocalDate date;
 
-//    @OneToOne
-//    @JoinColumn(name = "idUser",nullable = false)
-//    private User user;
+   @OneToOne
+   @JoinColumn(name = "idUser",nullable = false)
+   private User user;
 
     @OneToMany
     private List<Commandes> commandes;

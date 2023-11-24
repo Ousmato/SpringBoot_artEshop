@@ -15,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class ArtisanService {
     @Autowired
@@ -22,6 +24,9 @@ public class ArtisanService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private UserRepository userRepository;
     //methode post
     public Artisans addArtisan(Artisans artisans){
         Artisans artisanExist = artisanRepository.findByEmail(artisans.getEmail());
@@ -54,15 +59,22 @@ public class ArtisanService {
     }
 
     //Methode connexion pour verifier si l'utilisateur existe
-    public Artisans connexion(String email, String password){
+    public Object connexion(String email, String password) {
         Artisans artisans = artisanRepository.findByEmailAndPassword(email, password);
-        if(artisans != null){
+        if (artisans != null) {
             return artisans;
-        }else throw new EntityExistsException("Artisant doesn't exist");
+        } else {
+            User userExist = userRepository.findByEmailAndPassword(email, password);
+            if (userExist != null) {
+                return userExist;
+            } else {
+                return null; // Aucun utilisateur trouvé avec cet e-mail et ce mot de passe
+            }
+        }
     }
 
 
-//::::::::::::::::::::::::::::::::::::::
+    //::::::::::::::::::::::::::::::::::::::
 public Artisans addartisan(Artisans artisans, MultipartFile multipartFile) throws Exception {
     if (artisanRepository.findByEmail(artisans.getEmail()) == null) {
 
@@ -104,12 +116,8 @@ public Artisans addartisan(Artisans artisans, MultipartFile multipartFile) throw
 public String sendSimpleMail(String email , String messagemail)
 {
     final String fromEmail = "ousmatotoure73@gmail.com";
-
-//        String verificationCode = generateVerificationCode();
-
     Artisans artisans = artisanRepository.findByEmail(email);
 
-    // Try block to check for exceptions
     try {
 
         // Creating a simple mail message
@@ -137,24 +145,17 @@ public String messagemail(){
         return "  Vous ete invite  a vous connectez a votre nom avec votre adresse email et votre mot de passe  ";
 }
 //::::::::::::::::::::::::::::::; active un artisan
-public Artisans active(Artisans artisans ){
+public Artisans active(int idArtisans ){
 
-    Artisans artisanExist = artisanRepository.findByIdArtisans(artisans.getIdArtisans());
+    Artisans artisanExist = artisanRepository.findByIdArtisans(idArtisans);
     if (artisanExist!=null) {
+        artisanExist.setActive(!artisanExist.isActive());
 
-
-        artisans.setActive(true);
         String result = sendSimpleMail(artisanExist.getEmail(),messagemail());
 
-        artisanRepository.save(artisans);
-        return artisanRepository.findByIdArtisans(artisans.getIdArtisans());
+        return artisanRepository.save(artisanExist);
     }else
         throw new RuntimeException("Artisan n'exist pas");
 }
-//:::::::::::::::;;;liste a activer
-//    public List<Artisans> listeActive(List<Artisans> artisansList){
-//
-//    }
-
 
 }
