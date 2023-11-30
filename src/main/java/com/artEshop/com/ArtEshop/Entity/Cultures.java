@@ -22,6 +22,9 @@ public class Cultures {
     private String regionCulturel;
 
     @Column(nullable = false)
+    private String photo;
+
+    @Column(nullable = false)
     private String ethnie;
 
 //    @OneToMany

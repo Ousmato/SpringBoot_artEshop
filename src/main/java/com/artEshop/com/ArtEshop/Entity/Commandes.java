@@ -11,7 +11,7 @@ public class Commandes {
     private int idCommande;
 
     @Column(nullable = false)
-    private int quantite;
+    private double quantite;
 
     @ManyToOne
     @JoinColumn(name = "idProduit",nullable = false)
@@ -22,12 +22,16 @@ public class Commandes {
     private Panier panier;
 
     @ManyToOne
-    @JoinColumn(name = "idAchat",nullable = false)
-    private Achat achat;
+    @JoinColumn(name = "idUser",nullable = false)
+    private User user;
 
-//    @OneToOne
-//    @JoinColumn(name = "idNotification",nullable = false)
-//    private Notification notification;
+    @OneToOne
+    @JoinColumn(name = "idTaille",nullable = false)
+    private Taille taille;
+
+    @OneToOne
+    @JoinColumn(name = "idNotification",nullable = false)
+    private Couleurs couleurs;
 
 
 }

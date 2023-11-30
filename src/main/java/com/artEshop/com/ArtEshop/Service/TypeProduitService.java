@@ -19,5 +19,8 @@ public class TypeProduitService {
 
     public List<Types> readallProduitType(){
         return typeRepository.findAll();
+
     }
+
+
 }

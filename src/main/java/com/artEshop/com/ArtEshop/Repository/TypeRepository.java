@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface TypeRepository extends JpaRepository<Types, Integer> {
     List<Types> findByTaille(Taille taille);
-//    List<Types> findAllByProduits();
+  List<Types> findByProduitsIdProduit(int idProduit);
+//  Types findByProduitsIdProduit(int idpro)
 }

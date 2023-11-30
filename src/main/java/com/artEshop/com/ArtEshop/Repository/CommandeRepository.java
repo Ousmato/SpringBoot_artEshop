@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 
 public interface CommandeRepository extends JpaRepository<Commandes,Integer> {
+    Commandes findByProduitsIdProduitAndPanierIdPanier(int idProduit, int idPanier);
 }

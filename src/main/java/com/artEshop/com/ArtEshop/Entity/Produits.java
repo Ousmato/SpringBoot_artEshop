@@ -52,4 +52,5 @@ public class Produits {
     @JoinColumn(name = "idCategorie",nullable = false)
     private Categories categories;
 
+
 }

@@ -4,6 +4,8 @@ import com.artEshop.com.ArtEshop.Entity.*;
 import com.artEshop.com.ArtEshop.Repository.*;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 
@@ -36,6 +41,9 @@ public class ProduitService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     public Produits add(Produits produits) {
         Produits produitExist = produitRepository.findByCategoriesIdCategorieAndArtisansIdArtisans(produits.getCategories().getIdCategorie(), produits.getArtisans().getIdArtisans());
@@ -136,6 +144,118 @@ public class ProduitService {
 //    ::::::::::::::::;;methode pour appel list
     public  List<Produits> readallProduit(){
         return produitRepository.findAll();
+    }
+
+    public List<Produits> getProduitsList(){
+
+        List<Produits> produitsList = produitRepository.findByPublier(true);
+        return  produitsList;
+    }
+
+    //    :::::::::::::;apelle produit avec couleur et taille
+public   Map<String, Object>  produitByTaileAndColor(int idproduit){
+        Produits produitsExist = produitRepository.findByIdProduit(idproduit);
+    Map<String, Object> infoProduit = new HashMap<>();
+
+        if (produitsExist!=null){
+            List<Types> typesListExist =  typeRepository.findByProduitsIdProduit(idproduit);
+            List<Produit_Color> produit_colorListExist = produit_colorRepository.findByProduitsIdProduit(idproduit);
+            if(typesListExist.isEmpty()){
+                throw new RuntimeException("list type no exist");
+            }
+//            ::::::::::::::taille trier
+            List<Taille> tailleList = new ArrayList<>();
+            for (Types types : typesListExist){
+                tailleList.add(types.getTaille());
+            }
+            infoProduit.put("tailles",tailleList);
+//            :::::::::::::::::::::::couleurs trier
+            List<Couleurs> couleursList = new ArrayList<>();
+            for (Produit_Color produitColor : produit_colorListExist){
+                couleursList.add(produitColor.getCouleurs());
+            }
+            infoProduit.put("produitsCouleur",couleursList);
+        }else {
+            throw new RuntimeException("produit no exist");
+        }
+        infoProduit.put("produits",produitsExist);
+   return infoProduit;
+}
+//::::::::::::::::publier un produit:::::::::::::::::;
+    public  Produits publier(int idProduit){
+        Produits produitsExist = produitRepository.findByIdProduit(idProduit);
+        if (produitsExist!=null){
+            produitsExist.setPublier(!produitsExist.isPublier());
+
+            Artisans artisanExist = artisanRepository.findByIdArtisans(produitsExist.getArtisans().getIdArtisans());
+            if(artisanExist!=null){
+                String message = notificationService.messagemailPublierProduit();
+
+                String subject = " Acceptation du produit publié sur ArtEshop";
+                String result = sendSimpleMail(artisanExist.getEmail(),message, subject);
+
+            }
+            return produitRepository.save(produitsExist);
+        }else {
+            throw new RuntimeException("produit no exist");
+        }
+
+    }
+
+//    ::::::::::::::::::::::message
+
+    public String sendSimpleMail(String email , String messagemail,String subject)
+    {
+        final String fromEmail = "ousmatotoure73@gmail.com";
+        Artisans artisans = artisanRepository.findByEmail(email);
+
+        try {
+            String message = notificationService.messagemailPublierProduit();
+            // Creating a simple mail message
+            SimpleMailMessage mailMessage
+                    = new SimpleMailMessage();
+
+            // Setting up necessary details
+            mailMessage.setFrom(fromEmail);
+            mailMessage.setTo(artisans.getEmail());
+            mailMessage.setText("Bonjour! "+ artisans.getNom()+" "+message);
+            mailMessage.setSubject(subject);
+
+            // Sending the mail
+            javaMailSender.send(mailMessage);
+            return "Mail Sent Successfully...";
+        }
+
+        // Catch block to handle the exceptions
+        catch (Exception e) {
+            return "Error while Sending Mail";
+        }
+    }
+
+//::::::::::::::regeter un produit
+    public  String rejeter(int idProduit){
+        Produits produitsExist = produitRepository.findByIdProduit(idProduit);
+        if (produitsExist!=null){
+
+            Artisans artisanExist = artisanRepository.findByIdArtisans(produitsExist.getArtisans().getIdArtisans());
+            if(artisanExist!=null){
+                String message = notificationService.messagemailrejeterProduit();
+                String subject = " Rejet du produit publié sur ArtEshop";
+                notificationRepository.deleteAllByProduitsIdProduit(produitsExist.getIdProduit());
+                produitRepository.deleteById(produitsExist.getIdProduit());
+                String result = sendSimpleMail(artisanExist.getEmail(),message,subject);
+            }
+
+        }
+        return "success";
+    }
+//    :::::::::::::list produit similaire pour mobile
+    public  List<Produits> produitsListMobile(int idCategorie, String nomProduit){
+        List<Produits> produitsExist = produitRepository.findByCategoriesIdCategorieAndNomContaining(idCategorie,nomProduit);
+        if (produitsExist.isEmpty()){
+            throw new RuntimeException("not exist");
+        }
+        return produitsExist;
     }
 
 }

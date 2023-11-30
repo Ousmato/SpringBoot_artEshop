@@ -28,10 +28,11 @@ public String adduser(User user) {
         System.out.println(panierDate+"je trouver date");
         // Créez et enregistrez d'abord le panier
         Panier panier = new Panier();
-        panier.setDate(panierDate);
-        panier.setUser(user);
-        panierRepository.save(panier);
 
+        panier.setDate(panierDate);
+//        panier.set(user);
+        panierRepository.save(panier);
+        user.setPanier(panier);
         // Enregistrez ensuite l'utilisateur
         userRepository.save(user);
         return "success";
@@ -69,6 +70,9 @@ public String adduser(User user) {
     }
 
 
-
+//::::::::::::::::::::::::::nombre utilisateurs
+    public Long nombreUser(){
+    return userRepository.count();
+    }
 
 }

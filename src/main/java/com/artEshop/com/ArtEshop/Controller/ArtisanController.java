@@ -89,5 +89,10 @@ public Artisans modifier(@Valid @RequestBody Artisans artisans){
         return artisanService.update(artisans);
 }
 
+//::::::::::::::;;;;;le nombre artisan
+    @GetMapping("/nombre")
+    public Long nobreArtisan(){
+        return artisanService.nombreartisan();
+    }
 
 }

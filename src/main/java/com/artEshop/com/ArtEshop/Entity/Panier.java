@@ -1,5 +1,6 @@
 package com.artEshop.com.ArtEshop.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,10 +17,10 @@ public class Panier {
     @Column(nullable = false)
     private LocalDate date;
 
-   @OneToOne
-   @JoinColumn(name = "idUser",nullable = false)
-   private User user;
-
+//   @OneToOne
+//   @JoinColumn(name = "idUser",nullable = false)
+//   private User user;
+    @JsonIgnore
     @OneToMany
     private List<Commandes> commandes;
 

@@ -12,6 +12,9 @@ public class Achat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAchat;
 
-    @OneToMany
-    private List<Commandes> commandes;
+//    @OneToMany
+//    private List<Commandes> commandes;
+    @ManyToOne
+    @JoinColumn(name = "idCommande", nullable = false)
+    private Commandes commandes;
 }

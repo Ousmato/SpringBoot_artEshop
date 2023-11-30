@@ -48,5 +48,10 @@ public class UserController {
     public ResponseEntity<User> user(@RequestParam("email") String email, @RequestParam("password") String password){
         return new ResponseEntity<>(userService.connexion(email, password), HttpStatus.OK);
     }
+//:::::::::::::::::::::
+    @GetMapping("/nombre")
+    public Long nomreUser(){
+        return userService.nombreUser();
+    }
 
 }

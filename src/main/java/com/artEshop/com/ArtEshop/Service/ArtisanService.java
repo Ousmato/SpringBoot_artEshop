@@ -60,7 +60,7 @@ public class ArtisanService {
 
     //Methode connexion pour verifier si l'utilisateur existe
     public Object connexion(String email, String password) {
-        Artisans artisans = artisanRepository.findByEmailAndPassword(email, password);
+        Artisans artisans = artisanRepository.findByEmailAndPasswordAndActive(email, password,true);
         if (artisans != null) {
             return artisans;
         } else {
@@ -157,5 +157,10 @@ public Artisans active(int idArtisans ){
     }else
         throw new RuntimeException("Artisan n'exist pas");
 }
+
+//::::::::::::::::::;le nombre d'artisan
+    public long  nombreartisan(){
+        return artisanRepository.count();
+    }
 
 }

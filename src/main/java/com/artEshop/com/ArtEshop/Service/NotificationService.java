@@ -52,7 +52,7 @@ public class NotificationService {
         notification.setDescription(
         " client Cher "+" "+artisanExist.getNom()+"\n" +
                 "\n" +
-                "Nous espérons que vous allez bien ! Nous avons le plaisir de vous informer qu'un utilisateur dépuis  "+notification.getCommandes().getPanier().getUser().getPays()+" a récemment commandé l'un de vos produits le "+dateNotification+". Votre création continue de séduire notre clientèle " +
+                "Nous espérons que vous allez bien ! Nous avons le plaisir de vous informer qu'un utilisateur dépuis  "+notification.getCommandes().getUser().getPays()+" a récemment commandé l'un de vos produits le "+dateNotification+". Votre création continue de séduire notre clientèle " +
                 "!\n" +
                 "Nous sommes ravis de constater l'intérêt porté à votre travail exceptionnel. Votre art contribue à égayer notre plateforme et à offrir une expérience unique à nos utilisateurs." +
                 "\n" +
@@ -83,5 +83,39 @@ public class NotificationService {
 
         }
         return notification;
+    }
+
+    //::::::::::::::message qui doit etre envoyer
+    public String messagemailPublierProduit(){
+        return
+                "Nous sommes ravis de vous informer que votre compte artisan a été activé avec succès sur notre plateforme ! Vous êtes désormais prêt à profiter de tous les avantages offerts par notre communauté." +
+                "\n" +
+                "N'hésitez pas à explorer les fonctionnalités de notre plateforme, à mettre en valeur vos compétences et à interagir avec d'autres membres pour développer votre activité." +
+                "\n" +
+                "Nous vous souhaitons beaucoup de succès dans vos projets et restons à votre disposition pour toute question ou assistance supplémentaire." +
+                "\n" +
+                "Cordialement," +
+                "\n" +
+                "[L'équipe de ArtEshop]";
+    }
+
+    //::::::::::::::message qui doit etre envoyer pour rejet
+    public String messagemailrejeterProduit(){
+        return
+        " Nous tenons à vous informer que le produit que vous avez récemment publié sur notre plateforme a été rejeté pour les raisons suivantes :" +
+        "\n" +
+        "Raison du rejet : non-conformité aux normes de qualité, manque d'informations," +
+        "\n" +
+        "Nous comprenons que cela peut être décevant, mais nous sommes là pour vous aider à améliorer votre publication. N'hésitez pas à revoir les critères requis ou à nous contacter pour toute clarification supplémentaire." +
+        "\n" +
+        "Votre engagement envers la qualité est apprécié, et nous sommes convaincus que vous pourrez rapidement rectifier ces points pour proposer un produit conforme et de grande qualité." +
+        "\n" +
+        "Si vous avez des questions ou besoin d'assistance pour comprendre les exigences pour la publication sur notre plateforme, notre équipe est à votre disposition pour vous aider." +
+        "\n" +
+        "Nous vous remercions pour votre compréhension et votre coopération." +
+        "\n" +
+        "Cordialement," +
+        "\n" +
+        "[L'équipe de ArtEshop]";
     }
 }

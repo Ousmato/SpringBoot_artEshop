@@ -3,6 +3,8 @@ package com.artEshop.com.ArtEshop.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 public class User {
@@ -29,10 +31,12 @@ public class User {
     private String adresse;
 
 
-//    @OneToOne
-//    @JoinColumn(name = "idPanier",nullable = false)
-//    private Panier panier;
+    @OneToOne
+    @JoinColumn(name = "idPanier",nullable = false)
+    private Panier panier;
 
+    @OneToMany
+    private List<Commandes> commandesList;
 
 
 }

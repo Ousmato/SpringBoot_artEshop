@@ -11,6 +11,7 @@ public interface ArtisanRepository extends JpaRepository<Artisans, Integer> {
     Artisans findByEmail( String email);
     Artisans findByEmailAndNom( String email, String nom);
     Artisans findByEmailAndPassword( String email, String password);
+    Artisans findByEmailAndPasswordAndActive(String email, String password,boolean isActive);
     Artisans findByIdArtisansAndActive(int idArtisan, Boolean active);
 
 }

@@ -11,5 +11,6 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
     Notification findByIdNotification(int idNotification);
     List<Notification> findAllByProduitsPublier(boolean isPublic);
+    void deleteAllByProduitsIdProduit(int idProduit);
 }
 
