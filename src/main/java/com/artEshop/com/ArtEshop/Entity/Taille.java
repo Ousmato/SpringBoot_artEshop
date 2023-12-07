@@ -17,5 +17,8 @@ public class Taille {
     @NotBlank
     private String libelle;
 
+    @Column
+    private boolean effacerTaille = false;
+
 
 }

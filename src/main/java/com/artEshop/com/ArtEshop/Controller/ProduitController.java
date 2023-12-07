@@ -123,61 +123,93 @@ public ResponseEntity<Produits> ajouterProduit(
 
 
     }
-//    :::::::::: ajouter produit au commende
-//    @GetMapping("/ajouteCommande")
-//    private ResponseEntity<Commandes> ajoutCommande(
-//            @RequestParam double quantite,
-//            @RequestParam ("produit") String produitSring,
-//            @RequestParam("user") String userString,
-//            @RequestParam("panier") String panierString,
-//            @RequestParam("taille") String tailleString,
-//            @RequestParam("couleur") String couleurString
-//
-//    ){
-//        Produits produits;
-//        User user;
-//        Panier panier;
-//        Taille taille;
-//        Couleurs couleurs;
-//        try {
-//
-//            produits = new JsonMapper().readValue(produitSring, Produits.class);
-//            user = new JsonMapper().readValue(userString, User.class);
-//            panier = new JsonMapper().readValue(panierString, Panier.class);
-//            taille = new JsonMapper().readValue(tailleString, Taille.class);
-//            couleurs = new JsonMapper().readValue(couleurString, Couleurs.class);
-//
-//            Commandes saveCommande = commandeService.ajouterCommande(produits,quantite,user,panier,taille,couleurs);
-//            return new ResponseEntity<>(saveCommande, HttpStatus.OK);
-//        }catch (Exception e)
-//        {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//    @PostMapping("/ajouteCommande")
-//    private ResponseEntity<Commandes> ajouteCommande(
-//            @RequestParam ("commande") String commandeString){
-//        Commandes commandes;
-//        try {
-//            commandes = new JsonMapper().readValue(commandeString, Commandes.class);
-//            Commandes saveCommande = commandeService.ajouterCommande(commandes);
-//            return new ResponseEntity<>(saveCommande, HttpStatus.OK);
-//
-//    }catch (Exception e){
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//}
-
+//::::::::::::::::ajouter commande
     @PostMapping("/ajouteCommande")
     public  ResponseEntity<Commandes> ajoutCommante(@RequestBody Commandes commandes){
         try {
             System.out.println("-----------------------------------------------------");
-            Commandes saveCommande = commandeService.ajouterCommande(commandes);
+            System.out.println(commandes);
             System.out.println("-----------------------------------------------------1666");
+            Commandes saveCommande = commandeService.ajouterCommande(commandes);
             return new ResponseEntity<>(saveCommande, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    :::::::::::::::list commande par artisan
+
+//    :::::::::::::::::::::::::::::::;list produit par artisan
+    @GetMapping("/artisanListproduit/{idArtisan}")
+    private ResponseEntity<List<Produits>> artisanListProduit(@PathVariable int idArtisan){
+        try {
+            List<Produits> produitsList = produitService.artisanProduit(idArtisan);
+            return new ResponseEntity<>(produitsList, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+//    :::::::::::::::::::::::::::::;liste commande afficher dans panier sur interface
+@GetMapping("/commandeParUtilisateur/{idUtilisateur}")
+public  ResponseEntity<List<Commandes>> listCommandeUser(@PathVariable int idUtilisateur) {
+    try {
+
+        List<Commandes> list = commandeService.listCommandeUser(idUtilisateur);
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    }
+//    ::::::::::::::::::::::::;
+@GetMapping("/achat/{idProduit}/{quantite}")
+public  ResponseEntity<Produits> achat(@PathVariable int idProduit, @PathVariable double quantite){
+    try {
+        System.out.println("---------------contoller----------------");
+
+        Produits acchat = produitService.achtat(idProduit,quantite);
+        System.out.println("---------------produitSeervice----------------");
+
+        return new ResponseEntity<>(acchat, HttpStatus.OK);
+    }catch (Exception e){
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+//:::::::::::::::::::::::::::::::;ventes artisan
+@GetMapping("/ventes/{idArtisan}")
+private ResponseEntity<List<Commandes>> ventes(@PathVariable int idArtisan){
+    try {
+        List<Commandes> commandesList = commandeService.ventes(idArtisan);
+        return new ResponseEntity<>(commandesList, HttpStatus.OK);
+    }catch (Exception e){
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+//::::::::::::::::::::::::::::list de produits par categorie
+
+    @GetMapping("/produitParCategori/{idCategorie}")
+    private ResponseEntity<List<Produits>> produitCategorie(@PathVariable int idCategorie){
+        try {
+            List<Produits> produitsList = produitService.produitsListParCategori(idCategorie);
+            return new ResponseEntity<>(produitsList, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+//    ::::::::::::::: supprimer un produit par son id
+    @GetMapping("/supprimer/{idProduit}")
+    private ResponseEntity<String> supprimer(@PathVariable int idProduit){
+        String produitSup = produitService.suprimerParId(idProduit);
+        return new ResponseEntity<>(produitSup,HttpStatus.OK);
+    }
+//    :::::::::::::::modifier produit par son id
+@GetMapping("/update/{idProduit}")
+private ResponseEntity<Produits> modifier(@PathVariable int idProduit){
+    try {
+        Produits produits = produitService.updatProduit(idProduit);
+        return new ResponseEntity<>(produits, HttpStatus.OK);
+    }catch (Exception e){
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 }
 

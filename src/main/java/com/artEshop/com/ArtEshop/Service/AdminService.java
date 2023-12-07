@@ -3,6 +3,7 @@ package com.artEshop.com.ArtEshop.Service;
 import com.artEshop.com.ArtEshop.Entity.Admin;
 import com.artEshop.com.ArtEshop.Entity.Artisans;
 import com.artEshop.com.ArtEshop.Repository.AdminRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,18 +69,18 @@ public Admin addAdmin(Admin admin, MultipartFile multipartFile) throws Exception
                 if (!Files.exists(rootlocation)) {
                     Files.createDirectories(rootlocation);
                     Files.copy(multipartFile.getInputStream(), rootlocation.resolve(multipartFile.getOriginalFilename()));
-                    admin.setPhoto("http://10.0.2.2/artImage/" + multipartFile.getOriginalFilename());
+                    admin.setPhoto("artImage/" + multipartFile.getOriginalFilename());
                 } else {
                     try {
                         String nom = location + "\\" + multipartFile.getOriginalFilename();
                         Path name = Paths.get(nom);
                         if (!Files.exists(name)) {
                             Files.copy(multipartFile.getInputStream(), rootlocation.resolve(multipartFile.getOriginalFilename()));
-                            admin.setPhoto("http://10.0.2.2/artImage/" + multipartFile.getOriginalFilename());
+                            admin.setPhoto("artImage/" + multipartFile.getOriginalFilename());
                         } else {
                             Files.delete(name);
                             Files.copy(multipartFile.getInputStream(), rootlocation.resolve(multipartFile.getOriginalFilename()));
-                            admin.setPhoto("http://10.0.2.2/artImage/" + multipartFile.getOriginalFilename());
+                            admin.setPhoto("artImage/" + multipartFile.getOriginalFilename());
                         }
                     } catch (Exception e) {
                         throw new Exception("some error");
@@ -96,4 +97,22 @@ public Admin addAdmin(Admin admin, MultipartFile multipartFile) throws Exception
     }
 }
 
+@PostConstruct
+    public void init(){
+//        creer un admin au demarage
+    Admin admin = new Admin();
+    admin.setEmail("ousmatotoure98@gmail.com");
+    admin.setNom("Ousmato");
+    admin.setPhoto("artImage/2994ac02-7965-41de-9bab-d83658e31653.png");
+    admin.setPrenom("Toure");
+    admin.setPassword("12345@Ab");
+    admin.setSexe("Homme");
+    admin.setTelephone("73855156");
+    Admin admiExist = adminRepository.findByEmail(admin.getEmail());
+    if (admiExist == null){
+        adminRepository.save(admin);
+
+    }
+
+}
 }

@@ -5,12 +5,16 @@ import com.artEshop.com.ArtEshop.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 @Service
 public class CommandeService {
     @Autowired
     private CommandeRepository commandeRepository;
     @Autowired
-    private PanierRepository panierRepository;
+    private ArtisanRepository artisanRepository;
     @Autowired
     private ProduitRepository produitRepository;
 
@@ -25,55 +29,43 @@ public class CommandeService {
     private TailleRepository tailleRepository;
 
     public Commandes ajouterCommande( Commandes commandes){
-        System.out.println("------------------entree-----------------------------------");
+        System.out.println("------entre-----");
         Produits produits = produitRepository.findByIdProduit(commandes.getProduits().getIdProduit());
-//        Taille taille = tailleRepository.findByIdTaille(commandes.getTaille().getIdTaille());
-//        System.out.println(taille);
-        if (produits!= null){
-            System.out.println("---------------------produit trover--------------------------------");
-//            User userExist = userRepository.findByIdUser(commandes.getUser().getIdUser());
-//            System.out.println(userExist.toString());
-//            if (userExist != null){
-            System.out.println(commandes.getProduits());
-            System.out.println(commandes.getCouleurs());
-            System.out.println(commandes.getQuantite());
-            System.out.println(commandes.getTaille());
-            System.out.println(commandes.getPanier());
-            System.out.println(commandes.getUser());
-            System.out.println("---------------------terminer------------------");;
-                System.out.println("------------user avec-----------------------------------------");
-                commandeRepository.save(commandes);
-                System.out.println("-----------------commande save------------------------------------");
-                Notification notification = new Notification();
-                notification.setProduits(commandes.getProduits());
-                notification.setCommandes(commandes);
-                System.out.println("------------------------notification-----------------------------");
-                notificationService.messageArtisan(notification);
-
-                notificationRepository.save(notification);
-                System.out.println("---------------ind--------------------------------------");
+             if (produits!= null){
+                 DateTimeFormatter dateCommadeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
+                 System.out.println("yyyy/MM/dd hh:mm:ss-> " + dateCommadeFormatter.format(LocalDateTime.now()));
+                 String dateCommande = dateCommadeFormatter.format(LocalDateTime.now());
+                 commandes.setDate(dateCommande);
+                Commandes commandes1 = commandeRepository.save(commandes);
+                notificationService.messageArtisan(commandes1.getIdCommande());
+            return commandes1;
             }
-//        }
-        throw new RuntimeException("produit exist in comande");
+
+       throw new RuntimeException("produit exist in comande");
     }
 
+
+//    ::::::::::::::::list de commande pour un user
+public List<Commandes> listCommandeUser(int idUtilisateur){
+    User userExist = userRepository.findByIdUser(idUtilisateur);
+    List<Commandes> commandesList = commandeRepository.findByUtilisateurIdUser(idUtilisateur);
+    if (userExist!=null){
+        return commandesList;
+    }
+    throw new RuntimeException("artisan no exist");
 }
+//:::::::::::::::;list commande pour un artisan
+//    :::::::::::::::::::;les commande des produit correspond aux vente d'un artisan
 
-//        if (produits!=null){
-//            Types types = typeRepository.findByProduitsIdProduit(idProduit);
-//
-//            Panier panier = panierRepository.findByUserIdUser(commandes.getUser().getIdUser());
-//            Taille taille = tailleRepository.findByIdTaille(commandes.getTaille().getIdTaille());
-//            Taille taille2 = commandes.getTaille();
-//            Couleurs couleurs = couleurRepositorie.findByIdCouleur(commandes.getCouleurs().getIdCouleur());
-//            Commandes commandes = new Commandes();
-//            commandes.setPanier(panier);
-//            commandes.setProduits(produits);
-//            commandes.setQuantite(quantite);
-//            commandes.setUser(user);
-//            commandes.setTaille(taille);
-//            commandes.setCouleurs(couleurs);
-
+    public List<Commandes> ventes(int idArtisan){
+        Artisans artisanExist = artisanRepository.findByIdArtisans(idArtisan);
+        List<Commandes> commandesList = commandeRepository.findByProduitsArtisansIdArtisans(idArtisan);
+        if (artisanExist!=null){
+            return commandesList;
+        }
+        throw new RuntimeException("artisan no exist");
+    }
+}
 
 
 

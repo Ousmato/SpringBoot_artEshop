@@ -3,6 +3,8 @@ package com.artEshop.com.ArtEshop.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 public class Commandes {
@@ -13,6 +15,9 @@ public class Commandes {
     @Column(nullable = false)
     private double quantite;
 
+    @Column(nullable = false)
+    private String date;
+
     @ManyToOne
     @JoinColumn(name = "idProduit",nullable = false)
     private Produits produits;
@@ -22,16 +27,16 @@ public class Commandes {
     private Panier panier;
 
     @ManyToOne
-    @JoinColumn(name = "idUser",nullable = false)
-    private User user;
+    @JoinColumn(name = "idUsers",nullable = false)
+    private User utilisateur;
 
     @OneToOne
     @JoinColumn(name = "idTaille",nullable = false)
-    private Taille taille;
+    private Taille tailleProduit;
 
     @OneToOne
-    @JoinColumn(name = "idNotification",nullable = false)
-    private Couleurs couleurs;
+    @JoinColumn(name = "idCouleur",nullable = false)
+    private Couleurs couleursProduit;
 
 
 }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -41,6 +42,9 @@ public class ProduitService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private CategoriRepository categoriRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -147,9 +151,14 @@ public class ProduitService {
     }
 
     public List<Produits> getProduitsList(){
-
-        List<Produits> produitsList = produitRepository.findByPublier(true);
-        return  produitsList;
+        List<Produits> produitsList = produitRepository.findByPublierAndEffacerProduit(true,false);
+        System.out.println("---------------------popopop");
+        System.out.println(produitsList);
+        List<Produits> filteredProduitsList = produitsList.stream()
+                .filter(produit -> produit.getQuantite() > 0)
+                .collect(Collectors.toList());
+        System.out.println(filteredProduitsList);
+        return filteredProduitsList;
     }
 
     //    :::::::::::::;apelle produit avec couleur et taille
@@ -256,6 +265,92 @@ public   Map<String, Object>  produitByTaileAndColor(int idproduit){
             throw new RuntimeException("not exist");
         }
         return produitsExist;
+    }
+
+//    :::::::::::::::;;;appele produit par id artisan
+    public List<Produits>  artisanProduit(int idArtisan){
+        Artisans artisanExist = artisanRepository.findByIdArtisans(idArtisan);
+        if(artisanExist!=null){
+            List<Produits> produitsList = produitRepository.findByArtisansIdArtisansAndEffacerProduit(idArtisan,false);
+            if (produitsList.isEmpty()){
+                return  null;
+            }return produitsList;
+        }
+       throw new RuntimeException("artisan no exist");
+    }
+//:::::::::::::::::;achat de produit
+    public Produits achtat(int idProduit, double quantite){
+        System.out.println("---------------entree----------------");
+        Produits produitsExist = produitRepository.findByIdProduit(idProduit);
+        System.out.println("---------------produit----------------");
+
+        if (produitsExist!= null){
+            System.out.println("---------------sss----------------");
+
+            if(produitsExist.getQuantite()<quantite){
+                System.out.println("---------------moin---------------");
+
+                throw new RuntimeException("quantity not fund");
+            }else{
+                System.out.println("---------------quantite----------------");
+
+                produitsExist.setQuantite(produitsExist.getQuantite()-quantite);
+                produitsExist.setAcheter(true);
+                produitRepository.save(produitsExist);
+                System.out.println("---------------fin----------------");
+
+            }
+
+           return  produitsExist;
+        }
+        throw new RuntimeException("produits no exist");
+    }
+//    :::::::::::::::::::::list vente de l'artisan
+public List<Produits>  ventes(int idArtisan){
+    Artisans artisanExist = artisanRepository.findByIdArtisans(idArtisan);
+    if(artisanExist!=null){
+        List<Produits> produitsList = produitRepository.findByArtisansIdArtisansAndAcheter(idArtisan,true);
+        if (produitsList.isEmpty()){
+            return  null;
+        }return produitsList;
+    }
+    throw new RuntimeException("artisan no exist");
+}
+//::::::::::::::::::::;liste de produit par idCategorie
+public List<Produits>  produitsListParCategori(int idCategorie){
+        Categories categoriesExist = categoriRepository.findByIdCategorie(idCategorie);
+    if(categoriesExist!=null){
+        List<Produits> produitsList = produitRepository.findByCategoriesIdCategorieAndPublier(idCategorie,true);
+        if (produitsList.isEmpty()){
+            return  null;
+        }else {
+            List<Produits> filteredProduitsList = produitsList.stream()
+                    .filter(produit -> produit.getQuantite() > 0)
+                    .collect(Collectors.toList());
+            return filteredProduitsList;
+        }
+
+    }
+    throw new RuntimeException("category no exist");
+}
+//:::::::::::::::::::::::;suprimer un produit par id
+    public String suprimerParId(int idProduit){
+        Produits produitsExist = produitRepository.findByIdProduit(idProduit);
+        if(produitsExist!=null){
+            produitsExist.setEffacerProduit(true);
+
+            produitRepository.save(produitsExist);
+        }
+        return "success";
+    }
+
+//    ::::::::::::::::::produit modifier
+    public  Produits updatProduit(int idProduit){
+        Produits produitExist = produitRepository.findByIdProduit(idProduit);
+        if(produitExist!=null){
+            produitRepository.save(produitExist);
+        }
+        return produitExist;
     }
 
 }

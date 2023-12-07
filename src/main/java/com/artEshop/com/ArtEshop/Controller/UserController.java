@@ -19,9 +19,9 @@ public class UserController {
 
     //Endpoint pour ajouter un utilisateur
     @PostMapping("/add")
-    public String add(@Valid @RequestBody User user){
-        userService.adduser(user);
-        return "add successful";
+    public User add(@Valid @RequestBody User user){
+       return userService.adduser(user);
+
     }
 
     //Endpoint pour recuperer la liste des utilisateur

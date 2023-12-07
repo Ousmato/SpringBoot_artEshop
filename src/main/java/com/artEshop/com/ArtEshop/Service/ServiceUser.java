@@ -18,7 +18,7 @@ public class ServiceUser {
    @Autowired
    private PanierRepository panierRepository;
 //methode post
-public String adduser(User user) {
+public User adduser(User user) {
     User userExist = userRepository.findByEmail(user.getEmail());
     if (userExist != null) {
         throw new RuntimeException("User already exists");
@@ -35,7 +35,7 @@ public String adduser(User user) {
         user.setPanier(panier);
         // Enregistrez ensuite l'utilisateur
         userRepository.save(user);
-        return "success";
+        return user;
     }
    }
 //   methode get

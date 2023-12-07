@@ -12,5 +12,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     Notification findByIdNotification(int idNotification);
     List<Notification> findAllByProduitsPublier(boolean isPublic);
     void deleteAllByProduitsIdProduit(int idProduit);
+    List<Notification> findByArtisansIdArtisansAndCommandesIdCommande(int idArtisan, int idCommande);
+    List<Notification> findByArtisansIdArtisansAndCommandesIsNotNull(int idArtisan);
 }
 

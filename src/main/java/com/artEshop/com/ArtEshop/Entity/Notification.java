@@ -12,8 +12,8 @@ public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idNotification;
-
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)

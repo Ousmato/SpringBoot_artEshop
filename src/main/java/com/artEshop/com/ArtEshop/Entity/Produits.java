@@ -1,5 +1,6 @@
 package com.artEshop.com.ArtEshop.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -52,5 +53,7 @@ public class Produits {
     @JoinColumn(name = "idCategorie",nullable = false)
     private Categories categories;
 
+    @Column(nullable = false)
+    private boolean effacerProduit = false;
 
 }

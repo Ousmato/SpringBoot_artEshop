@@ -60,8 +60,12 @@ public class ArtisanService {
 
     //Methode connexion pour verifier si l'utilisateur existe
     public Object connexion(String email, String password) {
+
+        System.out.println("-----------------hhhhh--------");
         Artisans artisans = artisanRepository.findByEmailAndPasswordAndActive(email, password,true);
         if (artisans != null) {
+            System.out.println("-------------------------");
+            System.out.println(artisans);
             return artisans;
         } else {
             User userExist = userRepository.findByEmailAndPassword(email, password);

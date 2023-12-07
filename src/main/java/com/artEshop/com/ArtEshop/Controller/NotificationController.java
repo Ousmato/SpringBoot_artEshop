@@ -32,12 +32,24 @@ public class NotificationController {
 
 //    :::::::::::::;list pour admin
     @GetMapping("/list")
-    public  ResponseEntity<List<Notification>> readAll(boolean isPublic) {
+    public  ResponseEntity<List<Notification>> readAll() {
         try {
-            List<Notification> listNotifie = notificationService.reaAll(isPublic);
+            List<Notification> listNotifie = notificationService.reaAll();
 return new ResponseEntity<>(listNotifie,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+//    :::::::::::::::::::::::::list de notification pour un artisan
+@GetMapping("/listParArtisan/{idArtisan}")
+public  ResponseEntity<List<Notification>> listNotificationParArtisan(@PathVariable int idArtisan) {
+    try {
+
+        List<Notification> list = notificationService.listNotificationArtisan(idArtisan);
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
 }

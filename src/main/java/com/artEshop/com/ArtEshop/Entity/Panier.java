@@ -20,9 +20,9 @@ public class Panier {
 //   @OneToOne
 //   @JoinColumn(name = "idUser",nullable = false)
 //   private User user;
-    @JsonIgnore
-    @OneToMany
-    private List<Commandes> commandes;
+//    @JsonIgnore
+//    @OneToMany
+//    private List<Commandes> commandes;
 
 
 }

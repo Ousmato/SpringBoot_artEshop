@@ -17,5 +17,8 @@ public class Categories {
     @NotBlank
     private String nom;
 
+    @Column
+    private boolean effaceCategory = false;
+
 
 }
